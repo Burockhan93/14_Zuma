@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     {
         _prefab = FindObjectOfType<digits>();
         
-        
     }
 
     // Update is called once per frame
