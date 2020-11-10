@@ -11,18 +11,19 @@ public class LevelManager : MonoBehaviour
 
     private int currentLevel;
 
-    private void Start()
+    public void Start()
     {
         currentLevel = 1;
     }
 
-    private void StartLevel()
+    public void StartLevel()
     {
         var currentLevelData = _levelDatas.FirstOrDefault(x => x.levelId == currentLevel);
-         _spawnController.StarSpawn(currentLevelData);
+        
+        _spawnController.StarSpawn(currentLevelData);
     }
 
-    private void EndLevel()
+    public void EndLevel()
     {
         currentLevel++;
     }

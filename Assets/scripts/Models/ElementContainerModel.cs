@@ -6,9 +6,24 @@ using UnityEngine;
 
 public class ElementContainerModel : MonoBehaviour
 {
-    public List<Transform> items;
-    private float _distanceBetweenItems;
+    public List<Transform> items;  // element container leveldataya bilgi vermesi lazimki her levelda kac item üretileccegi bilinsin 
+    private float _distanceBetweenItems;    // su an public 10 diye ayarladm. // Array olsa daha iyi gibi sanki
 
+
+
+
+    private void start()
+    {
+        
+    }
+    private void Update()
+    {
+        foreach(Transform i in items)
+        {
+            if(i != null)
+            i.Translate(0, 0, 0.01f);
+        }
+    }
 
     public void AddElement(Transform element)
     {
@@ -17,6 +32,8 @@ public class ElementContainerModel : MonoBehaviour
 
         items.Add(element);
     }
+
+
 
     public Transform GetElement(int index)
     {
