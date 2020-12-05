@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     private digits _prefab;
     private sayi sayiInPlayer;
     Collider m_ObjectCollider;
+
+    public GameObject algebra;
+    private AlgebraModel _algebra;
     
     void Start()
     {
@@ -37,21 +40,27 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left),out hit, Mathf.Infinity,1<<8))
         {
+           
+            _algebra = new AlgebraModel(2, Instantiate(algebra, transform.position, Quaternion.identity));
             
-            sayiInPlayer = _prefab.create();
-            sayiInPlayer.tag = "mermi";
-            if (sayiInPlayer.tag=="mermi")
-            Movesayi(sayiInPlayer, hit);
+            //_algebra = Instantiate(_algebra, transform.position, Quaternion.identity);
+            //_algebra.gameObject.AddComponent<AlgebraModel>();
+            //Debug.Log(_algebra.Value);
+            Movesayi(_algebra, hit);
 
         }   
 
     }
 
-    void Movesayi(sayi sayi, RaycastHit hit)
+    void Movesayi(AlgebraModel _algebra, RaycastHit hit)
     {
         
-        sayiInPlayer.transform.position = transform.position;
-        sayiInPlayer.transform.DOMove(hit.point, 2f).OnComplete(() => Destroy(sayiInPlayer.gameObject));
+        _algebra.transform.position = transform.position;
+        while (Vector3.Distance(_algebra.transform.position,hit.point) < 0.5f)
+        {
+            _algebra.transform.position = Vector3.MoveTowards(_algebra._holdable.transform.position, hit.point, 0.5f);
+        }
+        //_algebra._holdable.transform.DOMove(hit.point, 2f).OnComplete(() => Destroy(sayiInPlayer.gameObject));
         
     }
 

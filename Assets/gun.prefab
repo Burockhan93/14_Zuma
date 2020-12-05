@@ -2183,5 +2183,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 472767dfd2f1c94469dab94e49d7d5e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particle: {fileID: 3000436076121980236, guid: b7bcd8964e514f948b924d6dea27a58f,
-    type: 3}
+  algebra: {fileID: 4831149275926573269, guid: 6a6778ba997764c42a80a65b7b292757, type: 3}

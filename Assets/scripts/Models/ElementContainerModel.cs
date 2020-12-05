@@ -9,13 +9,9 @@ public class ElementContainerModel : MonoBehaviour
     public List<Transform> items;  // element container leveldataya bilgi vermesi lazimki her levelda kac item üretileccegi bilinsin 
     private float _distanceBetweenItems;    // su an public 10 diye ayarladm. // Array olsa daha iyi gibi sanki
 
+    public List<GameObject> algebra;
+    
 
-
-
-    private void start()
-    {
-        
-    }
     private void Update()
     {
         foreach(Transform i in items)
@@ -25,12 +21,27 @@ public class ElementContainerModel : MonoBehaviour
         }
     }
 
-    public void AddElement(Transform element)
+    public void AddElement(Transform element, AlgebraModel model)
     {
         if (items == null)
             items = new List<Transform>();
 
         items.Add(element);
+        Debug.Log(model.Value);
+        Debug.Log(element);
+        Debug.Log(model._holdable);
+        AddAlgebra(model._holdable);
+
+    }
+
+    public void AddAlgebra(GameObject model)
+    {
+        var j = items.Count;
+        Transform i = items[j - 1];
+        model = Instantiate(model, items[j - 1].transform.position, Quaternion.identity);
+        model.transform.parent = i.transform;
+        
+       
     }
 
 
