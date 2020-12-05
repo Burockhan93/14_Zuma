@@ -8,7 +8,7 @@ public class SpawnController : MonoBehaviour
     [SerializeField] private List<GameObject> _digitPrefabs;
     
     private float distance = 1f;
-    private ElementContainerModel _elementContainer;
+    private ElementContainerController _elementContainer;
     private PathData _pathData;
     private int numberOfElement;
 
@@ -20,7 +20,7 @@ public class SpawnController : MonoBehaviour
 
     private void Start()
     {
-        _elementContainer = FindObjectOfType<ElementContainerModel>();
+        _elementContainer = FindObjectOfType<ElementContainerController>();
 
     }
 
@@ -33,7 +33,7 @@ public class SpawnController : MonoBehaviour
 
         StartJourney(_elementContainer,model);
     }
-    private void StartJourney(ElementContainerModel elementContainer, List<AlgebraModel> model)
+    private void StartJourney(ElementContainerController elementContainer, List<AlgebraModel> model)
     {
         StartCoroutine(_makeaList(elementContainer, model));
         
@@ -65,17 +65,12 @@ public class SpawnController : MonoBehaviour
                     modelstospwan.Add(new AlgebraModel(4, _digitPrefabs[3]));
                    
                     break;
-
-                default:
-                    break;
-
             }
-            
         }
         return modelstospwan;
     }
 
-    private IEnumerator _makeaList(ElementContainerModel elementContainer, List<AlgebraModel> model)
+    private IEnumerator _makeaList(ElementContainerController elementContainer, List<AlgebraModel> model)
     {
         
         for (int i = 0; i < numberOfElement; i++)

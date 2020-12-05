@@ -16,7 +16,7 @@ public class Manager : MonoBehaviour
 
     [Range(0.0f, 5.0f)] public float _speed;
     int ilkSayi;
-    
+
     void Start()
     {
         p = GetComponent<ParticleSystem>();
@@ -26,37 +26,30 @@ public class Manager : MonoBehaviour
         sayiInManager.myEvent.AddListener(dMove);
     }
 
-    private void Awake()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
         _countdown -= Time.deltaTime;
         if (_countdown <= 0)
         {
-            
-            sayiInManager =_prefab.create();
-            m= sayiInManager.GetComponent<Collider>();
-            if (m != null) {
+            sayiInManager = _prefab.create();
+            m = sayiInManager.GetComponent<Collider>();
+            if (m != null)
+            {
                 m.isTrigger = false;
-                Move(sayiInManager);              
+                Move(sayiInManager);
             }
-           _countdown = 2;
+
+            _countdown = 2;
         }
-        
     }
 
     void Move(sayi sayi)
     {
-
         Sequence mysequence = DOTween.Sequence();
         sayi.transform.position = paths[0].position;
-        mysequence.Append(sayi.transform.DOMove(paths[1].position,6f)).Append(sayi.transform.DOMove(paths[2].position, 3f)).Append(sayi.transform.DOMove(paths[3].position, 6f));
-        
-        
+        mysequence.Append(sayi.transform.DOMove(paths[1].position, 6f))
+            .Append(sayi.transform.DOMove(paths[2].position, 3f)).Append(sayi.transform.DOMove(paths[3].position, 6f));
     }
 
     void dMove()
@@ -64,8 +57,5 @@ public class Manager : MonoBehaviour
         Debug.Log("Event calisti");
         p.transform.position = sayiInManager.gameObject.transform.position;
         p.Play();
-
     }
-
-   
 }

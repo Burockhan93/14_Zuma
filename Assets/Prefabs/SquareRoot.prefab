@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2244210105373916867}
   - component: {fileID: 167474981255760767}
   - component: {fileID: 1862276988793161619}
+  - component: {fileID: 8400869796863685507}
   m_Layer: 0
   m_Name: SquareRoot
   m_TagString: Untagged
@@ -790,3 +791,15 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &8400869796863685507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4831149275926573269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18e93bc1f9bc7b844a3c9d33103da966, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

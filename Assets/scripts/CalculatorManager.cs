@@ -1,18 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CalculatorManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+   [SerializeField] private ElementContainerController _elementContainer;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   private void Awake()
+   {
+      PlayerController.onPlayerHit.AddListener(DestroyNearestItems);
+   }
+
+   private void DestroyNearestItems(Vector3 vec)
+   {
+      var transforms = _elementContainer.GetNearestTwoTransforms(vec);
+
+      foreach (var item in transforms)
+      {
+         Destroy(item.GetChild(0).gameObject);
+      }
+   }
 }
