@@ -11,10 +11,12 @@ public class ElementContainerController : MonoBehaviour
         items; // element container leveldataya bilgi vermesi lazimki her levelda kac item üretileccegi bilinsin 
 
     private float _distanceBetweenItems; // su an public 10 diye ayarladm. // Array olsa daha iyi gibi sanki
-    public List<GameObject> algebra;
+    
 
     [SerializeField] private LevelManager _levelManager;
     private int createdItemCount = 0;
+
+    private int IndextoReturn; // buraya da bakilacak listede yok olan iki elemannin yerine yeni prefab eklenecegi zaman caöiisiyor.
 
     private void Update()
     {
@@ -37,17 +39,19 @@ public class ElementContainerController : MonoBehaviour
 
         items.Add(element);
         Debug.Log(model.Value);
-        Debug.Log(element);
-        Debug.Log(model._holdable);
-        AddAlgebra(model._holdable);
+        AddAlgebra(model);
     }
 
-    public void AddAlgebra(GameObject model)
+    public void AddAlgebra(AlgebraModel model)
     {
         var j = items.Count;
         Transform i = items[j - 1];
-        model = Instantiate(model, items[j - 1].transform.position, Quaternion.identity);
-        model.transform.parent = i.transform;
+        GameObject addedModel;
+        addedModel = Instantiate(model._holdable, items[j - 1].transform.position, Quaternion.identity);
+               
+        addedModel.AddComponent<AlgebraModel>();
+        addedModel.GetComponent<AlgebraModel>().setValue(model.getValue()); // cok karmasik düzelmesi gerek
+        addedModel.transform.parent = i.transform;
 
         var path = _levelManager.GetCurrentPath();
         var levelTime = _levelManager.GetLevelTime();
@@ -110,6 +114,23 @@ public class ElementContainerController : MonoBehaviour
 
         nearestPoints.Add(items[nearestIndex]);
         nearestPoints.Add(items[secNearestIndex]);
+        
+
+        if(nearestIndex < secNearestIndex)
+        {
+            IndextoReturn = nearestIndex;
+        }
+        else
+        {
+            IndextoReturn = secNearestIndex;
+        }
+
+
         return nearestPoints;
+    }
+
+    public int getIndextoReturn()
+    {
+        return IndextoReturn;
     }
 }

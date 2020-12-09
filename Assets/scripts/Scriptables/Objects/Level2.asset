@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level2
   m_EditorClassIdentifier: 
   levelId: 2
-  levelTime: 60
-  levelDigits: 0100000002000000030000000400000005000000
-  path: {fileID: 11400000, guid: 1d28e64e57e74be48af25b4a8053dfff, type: 2}
+  levelTime: 20
+  levelDigits: 0100000002000000030000000400000004000000
+  path: {fileID: 11400000, guid: 27e0248790e046946a113ba4e8e912c9, type: 2}

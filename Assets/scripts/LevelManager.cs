@@ -46,6 +46,7 @@ public class LevelManager : MonoBehaviour
     {
         //LevelBitince olacaklar sıralanacak
         currentLevel++;
+        isLevelStarted = false;
     }
 
     public PathData GetCurrentPath()

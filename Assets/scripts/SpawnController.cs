@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SpawnController : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> _digitPrefabs;
+    [SerializeField] private List<GameObject> _digitPrefabs; // private ve nonstaticti deneme amali cevirdik
     
     private float distance = 1f;
     private ElementContainerController _elementContainer;

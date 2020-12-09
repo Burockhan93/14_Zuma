@@ -658,7 +658,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
-  algebra: []
   _levelManager: {fileID: 287840593}
 --- !u!4 &514348995
 Transform:
@@ -1031,6 +1030,7 @@ MonoBehaviour:
   - {fileID: 6697190817655762783, guid: b326eea5b5eeb6c4a84c92d3eac00afa, type: 3}
   - {fileID: 8590280936347973454, guid: 3b27087a7ebeafa4cb3fec1db8ba3629, type: 3}
   - {fileID: 3230783293940121521, guid: ab964573d0df1e1489148afac4f0f878, type: 3}
+  - {fileID: 4912387132598776851, guid: 1df1bb424b005084eb05a44f36753d26, type: 3}
   a: {fileID: 648299339}
 --- !u!4 &732609198
 Transform:
@@ -1258,6 +1258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _elementContainer: {fileID: 514348994}
+  "d\xF6rt": {fileID: 3230783293940121521, guid: ab964573d0df1e1489148afac4f0f878,
+    type: 3}
 --- !u!4 &1146058818
 Transform:
   m_ObjectHideFlags: 0
@@ -1736,7 +1738,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-43010
+  m_Name: pb_Mesh-1280
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

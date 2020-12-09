@@ -6,11 +6,7 @@ public class AlgebraModel : MonoBehaviour, IHoldable
 {
 
     public int Value { get; set; }
-    //{
-    //    get => Value;
-    //    set => Value = value;
-    //}
-
+   
     public GameObject _holdable {get;set;}
 
     public AlgebraModel (int value, GameObject holdable)
@@ -29,7 +25,7 @@ public class AlgebraModel : MonoBehaviour, IHoldable
     private void OnTriggerEnter(Collider other)
     {
         Hit(other);
-        //Calculate(other);
+        
     }
 
     public void Hit(Collider other)
@@ -40,8 +36,15 @@ public class AlgebraModel : MonoBehaviour, IHoldable
         }
     }
 
-    public void Calculate(Collider other)
+    
+    public int getValue()
     {
-        Debug.Log(other.GetComponent<AlgebraModel>().Value);
+        return Value;
+    }
+
+    public void setValue(int val)
+    {
+        Value = val;
+       
     }
 }

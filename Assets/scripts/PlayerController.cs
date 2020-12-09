@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
         _prefab = FindObjectOfType<digits>();
         onPlayerHit.AddListener((vec)=> Debug.Log(vec.x +","+vec.y +","+vec.z +": Hitted"));
     }
-
+    
     // Update is called once per frame
     void Update()
     {
