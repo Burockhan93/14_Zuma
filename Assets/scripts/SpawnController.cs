@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class SpawnController : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> _digitPrefabs; // private ve nonstaticti deneme amali cevirdik
+    [SerializeField] private List<GameObject> _digitPrefabs; 
+    public static Dictionary<int, GameObject> allAlgebra = new Dictionary<int, GameObject>();
     
+
     private float distance = 1f;
     private ElementContainerController _elementContainer;
     private PathData _pathData;
@@ -20,6 +22,13 @@ public class SpawnController : MonoBehaviour
 
     private void Start()
     {
+        int Storage = _digitPrefabs.Count;
+        for (int i=0; i < Storage; i++)
+        {
+            allAlgebra.Add(i, _digitPrefabs[i]);  // bütün elemanlaribu dictionaryde topladik
+        }
+        
+
         _elementContainer = FindObjectOfType<ElementContainerController>();
 
     }
@@ -43,29 +52,32 @@ public class SpawnController : MonoBehaviour
     {
         
         List<AlgebraModel> modelstospwan = new List<AlgebraModel>();
-        for (int i=0; i<levelDigits.Count; i++)
-        {
-            switch (levelDigits[i])
-            {
 
-                case 1:
+        
+        foreach (int i in levelDigits)
+        {
+            modelstospwan.Add(new AlgebraModel(i, _digitPrefabs[i]));
+            //switch (levelDigits[i])
+            //{
+
+            //    case 1:
                    
-                    modelstospwan.Add(new AlgebraModel(1, _digitPrefabs[0]));
+            //        modelstospwan.Add(new AlgebraModel(1, _digitPrefabs[0]));
                     
-                    break;
-                case 2:
-                    modelstospwan.Add(new AlgebraModel(2, _digitPrefabs[1]));
+            //        break;
+            //    case 2:
+            //        modelstospwan.Add(new AlgebraModel(2, _digitPrefabs[1]));
                     
-                    break;
-                case 3:
-                    modelstospwan.Add(new AlgebraModel(3, _digitPrefabs[2]));
+            //        break;
+            //    case 3:
+            //        modelstospwan.Add(new AlgebraModel(3, _digitPrefabs[2]));
                     
-                    break;
-                case 4:
-                    modelstospwan.Add(new AlgebraModel(4, _digitPrefabs[3]));
+            //        break;
+            //    case 4:
+            //        modelstospwan.Add(new AlgebraModel(4, _digitPrefabs[3]));
                    
-                    break;
-            }
+            //        break;
+            //}
         }
         return modelstospwan;
     }

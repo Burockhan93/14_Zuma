@@ -7,14 +7,17 @@ using UnityEngine;
 
 public class ElementContainerController : MonoBehaviour
 {
-    public List<Transform>
-        items; // element container leveldataya bilgi vermesi lazimki her levelda kac item üretileccegi bilinsin 
+    
+
+    public List<Transform> items; // element container leveldataya bilgi vermesi lazimki her levelda kac item üretileccegi bilinsin 
 
     private float _distanceBetweenItems; // su an public 10 diye ayarladm. // Array olsa daha iyi gibi sanki
     
 
     [SerializeField] private LevelManager _levelManager;
     private int createdItemCount = 0;
+    public GameObject test;
+
 
     private int IndextoReturn; // buraya da bakilacak listede yok olan iki elemannin yerine yeni prefab eklenecegi zaman caöiisiyor.
 
@@ -26,7 +29,7 @@ public class ElementContainerController : MonoBehaviour
             i.Translate(0, 0, 0.01f);
         }*/
     }
-
+    
     private void Awake()
     {
         LevelManager.onLevelEnd.AddListener(() => createdItemCount = 0);
@@ -38,7 +41,7 @@ public class ElementContainerController : MonoBehaviour
             items = new List<Transform>();
 
         items.Add(element);
-        Debug.Log(model.Value);
+        //Debug.Log(model.Value);
         AddAlgebra(model);
     }
 
@@ -57,6 +60,23 @@ public class ElementContainerController : MonoBehaviour
         var levelTime = _levelManager.GetLevelTime();
         var itemNumber = _levelManager.GetLevelDigitNumber();
         FollowPath(path, i, levelTime, itemNumber);
+    }
+
+    public void AddAlgebraOnGame(int calculatedValue,int index)
+    {
+        //test = SpawnController.allAlgebra[calculatedValue]; // gameobject döndürecek
+        test = Instantiate(SpawnController.allAlgebra[calculatedValue], items[index].position, Quaternion.identity);
+
+        //test.AddComponent<AlgebraModel>();
+        if (test.GetComponent<AlgebraModel>()) 
+        {
+            test.GetComponent<AlgebraModel>().setValue(calculatedValue); //yine sayiyi uretip algebra model ekledik.
+            test.transform.parent = items[index];
+        }
+        
+        
+        //Debug.Log(items[index].position);
+        
     }
 
     private void FollowPath(PathData getCurrentPath, Transform elementCont, float levelTime, int getLevelDigitNumber)
@@ -132,5 +152,21 @@ public class ElementContainerController : MonoBehaviour
     public int getIndextoReturn()
     {
         return IndextoReturn;
+    }
+
+    public  void Itemregulator()
+    {
+        List<GameObject> temp = new List<GameObject>();
+        foreach(Transform i in items)
+        {
+            temp.Add(i.GetChild(0).gameObject);
+        }
+        int size = temp.Count;
+
+        for (int i = 0; i < size; i++)
+        {
+            temp[i].transform.position = items[i].position;
+            temp[i].transform.parent = items[i];
+        }
     }
 }

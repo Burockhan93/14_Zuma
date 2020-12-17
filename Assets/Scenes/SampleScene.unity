@@ -659,6 +659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items: []
   _levelManager: {fileID: 287840593}
+  test: {fileID: 4831149275926573269, guid: 6a6778ba997764c42a80a65b7b292757, type: 3}
 --- !u!4 &514348995
 Transform:
   m_ObjectHideFlags: 0
@@ -1026,11 +1027,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _digitPrefabs:
+  - {fileID: 1361548447731972391, guid: 5e91d89b4ccee5e49be599aadab10bae, type: 3}
   - {fileID: 1472958628840278641, guid: 303e5e101dffdb043b2c99a2f55bf04d, type: 3}
   - {fileID: 6697190817655762783, guid: b326eea5b5eeb6c4a84c92d3eac00afa, type: 3}
   - {fileID: 8590280936347973454, guid: 3b27087a7ebeafa4cb3fec1db8ba3629, type: 3}
   - {fileID: 3230783293940121521, guid: ab964573d0df1e1489148afac4f0f878, type: 3}
-  - {fileID: 4912387132598776851, guid: 1df1bb424b005084eb05a44f36753d26, type: 3}
+  - {fileID: 4652735588188801824, guid: dcb632dfa0a87904bbb0592dfd4e0fa5, type: 3}
+  - {fileID: 6835461479083567474, guid: 2a04e67fd33a8554d932efaf6aef7e0c, type: 3}
+  - {fileID: 6625722912900140068, guid: bad2dce2495d52043b4ecfe7c532d301, type: 3}
+  - {fileID: 5481024814328140214, guid: 1c0882d4970808843ba2196260e17a49, type: 3}
+  - {fileID: 1325178057269478930, guid: 4158ab3c604f15d46b17197a593b50c3, type: 3}
   a: {fileID: 648299339}
 --- !u!4 &732609198
 Transform:
@@ -1258,8 +1264,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _elementContainer: {fileID: 514348994}
-  "d\xF6rt": {fileID: 3230783293940121521, guid: ab964573d0df1e1489148afac4f0f878,
-    type: 3}
 --- !u!4 &1146058818
 Transform:
   m_ObjectHideFlags: 0
@@ -1304,6 +1308,56 @@ Transform:
   - {fileID: 1693634205}
   m_Father: {fileID: 0}
   m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1219207242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1219207244}
+  - component: {fileID: 1219207243}
+  m_Layer: 0
+  m_Name: AlgebraOperator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1219207243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219207242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98631030abd24c44cbf212150c78d3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _operators:
+  - {fileID: 4647551063067041730, guid: 79cfb7d334199034181404a8972ab8dd, type: 3}
+  - {fileID: 2351579811685929578, guid: a8e9d2878a506e64eadea08862067a37, type: 3}
+  - {fileID: 6421559245328197439, guid: 15fe0564358ff854bb84bb3d9e8e71da, type: 3}
+  - {fileID: 7826839707227763489, guid: 1f4cf29696bf9444a957b7ca0929b6a3, type: 3}
+  - {fileID: 4831149275926573269, guid: 6a6778ba997764c42a80a65b7b292757, type: 3}
+  _Operator: 0
+--- !u!4 &1219207244
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219207242}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.182511, y: 2.6879344, z: -0.3564338}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1258405786
 GameObject:
@@ -1738,7 +1792,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1280
+  m_Name: pb_Mesh-1228
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2306,6 +2360,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 944861050}
     m_Modifications:
+    - target: {fileID: 1501656031, guid: 6fd5d0eaf087f384692589b2d4ce79cd, type: 3}
+      propertyPath: algebraOperator
+      value: 
+      objectReference: {fileID: 1219207243}
+    - target: {fileID: 1501656031, guid: 6fd5d0eaf087f384692589b2d4ce79cd, type: 3}
+      propertyPath: calculatorManager
+      value: 
+      objectReference: {fileID: 1146058817}
     - target: {fileID: 2561109930013918548, guid: 6fd5d0eaf087f384692589b2d4ce79cd,
         type: 3}
       propertyPath: m_LocalPosition.x

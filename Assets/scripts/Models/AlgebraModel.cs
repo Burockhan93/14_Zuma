@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AlgebraModel : MonoBehaviour, IHoldable
 {
+    
 
     public int Value { get; set; }
    
@@ -16,7 +17,7 @@ public class AlgebraModel : MonoBehaviour, IHoldable
         _holdable = holdable;
     }
 
-    
+
     //public List<GameObject> digits  // IHoldable da liste olusturup ordan teket teker algebraya isaretleri alacatm olmadi .
     //{
     //    get; set;

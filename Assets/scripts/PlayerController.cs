@@ -10,17 +10,13 @@ using UnityStandardAssets.Utility;
 public class PlayerController : MonoBehaviour
 {
     public static HitEvent onPlayerHit = new HitEvent();
-    private digits _prefab;
-    private sayi sayiInPlayer;
-    Collider m_ObjectCollider;
+    
+    public AlgebraOperator algebraOperator;
 
-    public GameObject algebra;
-    private AlgebraModel _algebra;
-
+    
     void Start()
     {
-        _prefab = FindObjectOfType<digits>();
-        onPlayerHit.AddListener((vec)=> Debug.Log(vec.x +","+vec.y +","+vec.z +": Hitted"));
+        //onPlayerHit.AddListener((vec)=> Debug.Log(vec.x +","+vec.y +","+vec.z +": Hitted"));
     }
     
     // Update is called once per frame
@@ -37,27 +33,42 @@ public class PlayerController : MonoBehaviour
 
     void Fire()
     {
+        GameObject _algebraOperator;
+        int i = Random.Range(0, 4);
+
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left), out hit, Mathf.Infinity,
             1 << 8))
         {
-            _algebra = Instantiate(algebra, transform.position, Quaternion.identity).GetComponent<AlgebraModel>();
-            _algebra.Value = 2;
-            //_algebra = Instantiate(_algebra, transform.position, Quaternion.identity);
-            //_algebra.gameObject.AddComponent<AlgebraModel>();
-            //Debug.Log(_algebra.Value);
-            Movesayi(_algebra, hit);
+            //_algebra = Instantiate(algebra, transform.position, Quaternion.identity).GetComponent<AlgebraModel>();
+            //_algebra.Value = 2;
+
+            _algebraOperator = Instantiate(algebraOperator._operators[i], transform.position, Quaternion.identity);
+
+            MoveIslem(_algebraOperator, hit);
         }
     }
 
-    void Movesayi(AlgebraModel _algebra, RaycastHit hit)
+    void MoveIslem(GameObject algebraOperator, RaycastHit hit)
     {
-        _algebra.transform.position = transform.position;
 
-        _algebra.transform.DOMove(hit.point, 1f).OnComplete(()=> onPlayerHit.Invoke(hit.point));
+        algebraOperator.transform.position = transform.position;
 
+        algebraOperator.transform.DOMove(hit.point, 0.5f).OnComplete(()=>MoveIslemOnComplete(hit.point,algebraOperator));
+        
         //_algebra._holdable.transform.DOMove(hit.point, 2f).OnComplete(() => Destroy(sayiInPlayer.gameObject));
     }
+
+    void MoveIslemOnComplete(Vector3 vec, GameObject algebraOperator)
+    {
+
+        CalculatorManager.islem = algebraOperator.GetComponent<AlgebraOperator>()._Operator;
+        onPlayerHit.Invoke(vec);
+
+    }
+
+
 }
 
 [System.Serializable]
