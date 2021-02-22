@@ -5,79 +5,44 @@ using DG.Tweening;
 using UnityEditor.UIElements;
 using UnityEngine;
 
+
 public class ElementContainerController : MonoBehaviour
 {
-    
-
-    public List<Transform> items; // element container leveldataya bilgi vermesi lazimki her levelda kac item üretileccegi bilinsin 
-
-    private float _distanceBetweenItems; // su an public 10 diye ayarladm. // Array olsa daha iyi gibi sanki
-    
-
+    public static List<Transform> items = new List<Transform>(); // element container leveldataya bilgi vermesi lazimki her levelda kac item üretileccegi bilinsin
+        
     [SerializeField] private LevelManager _levelManager;
+    [SerializeField] private AlgebraAdder _algebraAdder;
+
     private int createdItemCount = 0;
-    public GameObject test;
-
-
+    
     private int IndextoReturn; // buraya da bakilacak listede yok olan iki elemannin yerine yeni prefab eklenecegi zaman caöiisiyor.
 
-    private void Update()
-    {
-        /*foreach(Transform i in items)
-        {
-            if(i != null)
-            i.Translate(0, 0, 0.01f);
-        }*/
-    }
-    
     private void Awake()
-    {
-        LevelManager.onLevelEnd.AddListener(() => createdItemCount = 0);
+    {  
+        LevelManager.onLevelEnd.AddListener(() =>
+        {
+            createdItemCount = 0;
+            
+        });
     }
 
-    public void AddElement(Transform element, AlgebraModel model)
+    public void AddElement(Transform element, int models)
     {
-        if (items == null)
-            items = new List<Transform>();
 
         items.Add(element);
-        //Debug.Log(model.Value);
-        AddAlgebra(model);
-    }
 
-    public void AddAlgebra(AlgebraModel model)
-    {
+        _algebraAdder.AddAlgebra(models);
+
         var j = items.Count;
-        Transform i = items[j - 1];
-        GameObject addedModel;
-        addedModel = Instantiate(model._holdable, items[j - 1].transform.position, Quaternion.identity);
-               
-        addedModel.AddComponent<AlgebraModel>();
-        addedModel.GetComponent<AlgebraModel>().setValue(model.getValue()); // cok karmasik düzelmesi gerek
-        addedModel.transform.parent = i.transform;
 
         var path = _levelManager.GetCurrentPath();
         var levelTime = _levelManager.GetLevelTime();
         var itemNumber = _levelManager.GetLevelDigitNumber();
-        FollowPath(path, i, levelTime, itemNumber);
+        FollowPath(path, items[j - 1], levelTime, itemNumber);
+
     }
 
-    public void AddAlgebraOnGame(int calculatedValue,int index)
-    {
-        //test = SpawnController.allAlgebra[calculatedValue]; // gameobject döndürecek
-        test = Instantiate(SpawnController.allAlgebra[calculatedValue], items[index].position, Quaternion.identity);
-
-        //test.AddComponent<AlgebraModel>();
-        if (test.GetComponent<AlgebraModel>()) 
-        {
-            test.GetComponent<AlgebraModel>().setValue(calculatedValue); //yine sayiyi uretip algebra model ekledik.
-            test.transform.parent = items[index];
-        }
-        
-        
-        //Debug.Log(items[index].position);
-        
-    }
+   
 
     private void FollowPath(PathData getCurrentPath, Transform elementCont, float levelTime, int getLevelDigitNumber)
     {
@@ -88,7 +53,7 @@ public class ElementContainerController : MonoBehaviour
         {
             elementCont.DOPath(getCurrentPath.paths.ToArray(),  levelTime - getLevelDigitNumber)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => LevelManager.onLevelEnd.Invoke());
+                .OnComplete(() => LevelManager.onLevelEnd.Invoke()); //invokes the EndLevel in LevelManager
         }
         else
         {
@@ -105,68 +70,99 @@ public class ElementContainerController : MonoBehaviour
         return items[index];
     }
 
-    public List<Transform> GetNearestTwoTransforms(Vector3 point)
+    public List<Transform> GetNearestTwoTransforms(Vector3 point) // infinity yerine 5f kullandik gelistirilebilir
     {
         List<Transform> nearestPoints = new List<Transform>();
-        int counter = 0;
-
-        float nearestDistance = Mathf.Infinity;
-        float secNearestDistance = Mathf.Infinity;
+        Dictionary<int,float> liste = new Dictionary<int, float>();
 
         int nearestIndex = 0;
         int secNearestIndex = 0;
 
-        for (int i = 0; i < items.Count; i++)
+
+        //float nearestDistance = Mathf.Infinity;
+        //float secNearestDistance = Mathf.Infinity;
+
+        //float distance = 5;
+        //float distance1 = 5f;
+
+
+
+        for (int i=0; i < items.Count; i++)
         {
-            if (Vector3.Distance(items[i].position, point) < nearestDistance &&
-                Vector3.Distance(items[i].position, point) < secNearestDistance)
-            {
-                nearestDistance = Vector3.Distance(items[i].position, point);
-                nearestIndex = i;
-            }
-            else if (Vector3.Distance(items[i].position, point) >= nearestDistance &&
-                     Vector3.Distance(items[i].position, point) < secNearestDistance)
-            {
-                secNearestDistance = Vector3.Distance(items[i].position, point);
-                secNearestIndex = i;
-            }
+            liste.Add(i, Vector3.Distance(items[i].position, point));
+            
         }
 
-        nearestPoints.Add(items[nearestIndex]);
-        nearestPoints.Add(items[secNearestIndex]);
-        
+        //float a = Mathf.Infinity;
+        //float b = Mathf.Infinity;
+        float a = 3;
+        float b = 3;
 
-        if(nearestIndex < secNearestIndex)
+        foreach (KeyValuePair<int,float> mallik in liste)
         {
-            IndextoReturn = nearestIndex;
+            if (mallik.Value < a)
+            {
+                a = mallik.Value;
+                nearestIndex = mallik.Key;
+            }
+            
         }
-        else
+
+        liste[nearestIndex] = Mathf.Infinity;
+
+        foreach (KeyValuePair<int, float> mallik in liste)
         {
-            IndextoReturn = secNearestIndex;
+            if (mallik.Value < b)
+            {
+                b = mallik.Value;
+                secNearestIndex = mallik.Key;
+            }
+
         }
+        if (Mathf.Abs(nearestIndex - secNearestIndex) == 1)
+        {
+            nearestPoints.Add(items[nearestIndex]);
+            nearestPoints.Add(items[secNearestIndex]);
+        }
+          
+
+        //Debug.Log(a+"   "+b);
+        //Debug.Log(nearestIndex + "    " + secNearestIndex);
+
+        //for (int i = 0; i < items.Count; i++)
+        //{
+        //    if (Vector3.Distance(items[i].position, point) < distance &&
+        //        Vector3.Distance(items[i].position, point) < distance1)
+        //    {
+        //        distance = Vector3.Distance(items[i].position, point);
+        //        nearestIndex = i;
+                
+        //    }
+        //    else if (Vector3.Distance(items[i].position, point) >= distance &&
+        //             Vector3.Distance(items[i].position, point) < distance1)
+        //    {
+        //        distance1 = Vector3.Distance(items[i].position, point);
+        //        secNearestIndex = i;
+        //    }
+       // }
+
+
+        //if (Mathf.Abs(nearestIndex - secNearestIndex) == 1)
+        //{
+        //    nearestPoints.Add(items[nearestIndex]);
+        //    nearestPoints.Add(items[secNearestIndex]);
+
+        //    //Debug.Log("A: " + items[nearestIndex].GetChild(0).gameObject.GetComponent<AlgebraModel>().getValue() + "B: " +
+        //    //    items[secNearestIndex].GetChild(0).gameObject.GetComponent<AlgebraModel>().getValue());
+
+        //    Debug.Log(nearestIndex+" ---  "+secNearestIndex);
+
+
+        //}
 
 
         return nearestPoints;
     }
 
-    public int getIndextoReturn()
-    {
-        return IndextoReturn;
-    }
-
-    public  void Itemregulator()
-    {
-        List<GameObject> temp = new List<GameObject>();
-        foreach(Transform i in items)
-        {
-            temp.Add(i.GetChild(0).gameObject);
-        }
-        int size = temp.Count;
-
-        for (int i = 0; i < size; i++)
-        {
-            temp[i].transform.position = items[i].position;
-            temp[i].transform.parent = items[i];
-        }
-    }
+   
 }

@@ -6,47 +6,51 @@ using UnityEngine;
 public class CalculatorManager : MonoBehaviour
 {
    [SerializeField] private ElementContainerController _elementContainer;
-   public static AlgebraOperator.operations islem; //Player controllun icinde degistirioz bunu
+   [SerializeField] private AlgebraAdder _algebraAdder;
+    private AlgebraDestroyer _algebraDestroyer;
+
+    public static AlgebraOperator.operations islem; //Player controllun icinde degistirioz bunu
 
     
+    private void Start()
+    {
+        _algebraDestroyer = GetComponent<AlgebraDestroyer>();
+    }
 
-   private void Awake()
+    private void Awake()
    {
       PlayerController.onPlayerHit.AddListener(DestroyNearestItems);
         
    }
 
-   private void DestroyNearestItems(Vector3 vec)
+   private void DestroyNearestItems(Vector3 vec) 
    {
       var transforms = _elementContainer.GetNearestTwoTransforms(vec);
-      int index = _elementContainer.getIndextoReturn();
-      
-      int score = Calculate(transforms,islem);
-        if (score < 10)
+        if (transforms.Count == 2)//test
         {
-            _elementContainer.AddAlgebraOnGame(score, index);
+            int index = 0;
 
-            foreach (var item in transforms)
+            Debug.Log(transforms[0].GetChild(0).gameObject.GetComponent<AlgebraModel>().getValue() +
+                " " + islem + "  " + transforms[1].GetChild(0).gameObject.GetComponent<AlgebraModel>().getValue());
+                
+
+
+            int score = Calculate(transforms, islem);
+            if (score < 100 )
             {
-                //if (item.GetChild(0).GetComponent<AlgebraModel>()) test
-                //{
-                //    Debug.Log("null degil: "+ item.GetChild(0).GetComponent<AlgebraModel>().getValue());
-                //}
-                //Debug.Log(item.GetChild(0).GetComponent<AlgebraModel>().Value);
-                Destroy(item.GetChild(0).gameObject);
+                index =_algebraDestroyer.DestroyNearestItems(transforms);
+                _algebraAdder.AddAlgebraOnGame(score, index);
 
             }
+            if (score == 0)
+            {
+                _algebraDestroyer.OneElementDestroyer(index);               
+                
+            }
+
         }
-
-        _elementContainer.Itemregulator();
-
-
-
-       
-
-        
-
     }
+      
     
     private int Calculate(List<Transform> transform,AlgebraOperator.operations islem)
     {
@@ -54,38 +58,63 @@ public class CalculatorManager : MonoBehaviour
         int firstValue = transform[0].GetChild(0).GetComponent<AlgebraModel>().getValue();
         int secondValue = transform[1].GetChild(0).GetComponent<AlgebraModel>().getValue();
 
-        
-        
+        Debug.Log(firstValue + " islem  " + secondValue);
+       
         if (islem == AlgebraOperator.operations.ADD)
         {
-            CalculatedValue = AlgebraOperator.add(firstValue, secondValue);
+            CalculatedValue = add(firstValue, secondValue);
         }
         if (islem == AlgebraOperator.operations.DIVIDE)
         {
-            CalculatedValue = AlgebraOperator.divide(firstValue, secondValue);
+            CalculatedValue =divide(firstValue, secondValue);
         }
         if (islem == AlgebraOperator.operations.MULTIPLY)
         {
-            CalculatedValue = AlgebraOperator.multiply(firstValue, secondValue);
+            CalculatedValue = multiply(firstValue, secondValue);
         }
         if (islem == AlgebraOperator.operations.SUBTRACT)
         {
-            CalculatedValue = AlgebraOperator.subtract(firstValue, secondValue);
+            CalculatedValue = subtract(firstValue, secondValue);
         }
 
-        Debug.Log(firstValue + " " + islem + "\t: " + secondValue + " :" + CalculatedValue);
+        //Debug.Log(firstValue + " " + islem + "\t: " + secondValue + " :" + CalculatedValue);
 
         return CalculatedValue;
+    }
 
-        //if (CalculatedValue == 40) // kendi metodunu yapmamiz gerekecek
-        //{
-        //    AlgebraModel algebra = new AlgebraModel(CalculatedValue, test);
-        //    model=Instantiate(algebra._holdable,_elementContainer.items[_elementContainer.getIndextoReturn()].transform.position,Quaternion.identity);
-            
-        //    model.GetComponent<AlgebraModel>().setValue(CalculatedValue);
-        //}
 
-        Debug.Log("Elementcontainerda su kadar eleman var: " +_elementContainer.items.Count);
-        
-    } 
+    private int add(int a, int b)
+    {
+        return a + b;
+    }
+
+    private int subtract(int a, int b)
+    {
+        return a - b >= 0 ? (a - b) : (b - a);
+
+    }
+
+    private int divide(int a, int b)
+    {
+        if (a == 0 || b == 0)
+        {
+            return 0;
+        }
+
+        return a >= b ? (a / b) : (b / a);
+
+
+    }
+
+    private int multiply(int a, int b)
+    {
+        return a * b;
+    }
+
+    private int sqrt(int a)
+    {
+        return (int)Mathf.Sqrt(a);
+    }
+
+    
 }

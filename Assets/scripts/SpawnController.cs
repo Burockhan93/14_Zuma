@@ -5,92 +5,47 @@ using UnityEngine;
 
 public class SpawnController : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> _digitPrefabs; 
-    public static Dictionary<int, GameObject> allAlgebra = new Dictionary<int, GameObject>();
+        
+    private ElementContainerController elementContainer;
     
-
-    private float distance = 1f;
-    private ElementContainerController _elementContainer;
     private PathData _pathData;
     private int numberOfElement;
+    private List<int> models;
 
-    private List<AlgebraModel> model;
+    private GameObject a; //Transform yaratmak icin sahneye
+    private Transform _a;
+
+    private float _creationSpeed;
     
 
-    
-    public Transform a;  //Inspectordan bir küpü koydum degisebilir
-
-    private void Start()
+    void Start()
     {
-        int Storage = _digitPrefabs.Count;
-        for (int i=0; i < Storage; i++)
-        {
-            allAlgebra.Add(i, _digitPrefabs[i]);  // bütün elemanlaribu dictionaryde topladik
-        }
-        
+        _creationSpeed = 1f;
 
-        _elementContainer = FindObjectOfType<ElementContainerController>();
+        a = new GameObject();
+        _a = a.transform; 
 
+       elementContainer = FindObjectOfType<ElementContainerController>();
     }
 
-    public void StarSpawn(LevelData levelData)
+    public void StartSpawn(LevelData levelData)
     {
         _pathData = levelData.path;
         numberOfElement = levelData.levelDigits.Count;
+        models = levelData.levelDigits;
 
-        model = (ModelstoSpawn(levelData.levelDigits));
-
-        StartJourney(_elementContainer,model);
+        StartCoroutine(_makeaList(elementContainer, models));
     }
-    private void StartJourney(ElementContainerController elementContainer, List<AlgebraModel> model)
+   
+    private IEnumerator _makeaList(ElementContainerController elementContainer, List<int> models)
     {
-        StartCoroutine(_makeaList(elementContainer, model));
-        
-    }
-
-    private List<AlgebraModel> ModelstoSpawn(List<int> levelDigits)
-    {
-        
-        List<AlgebraModel> modelstospwan = new List<AlgebraModel>();
-
-        
-        foreach (int i in levelDigits)
-        {
-            modelstospwan.Add(new AlgebraModel(i, _digitPrefabs[i]));
-            //switch (levelDigits[i])
-            //{
-
-            //    case 1:
-                   
-            //        modelstospwan.Add(new AlgebraModel(1, _digitPrefabs[0]));
-                    
-            //        break;
-            //    case 2:
-            //        modelstospwan.Add(new AlgebraModel(2, _digitPrefabs[1]));
-                    
-            //        break;
-            //    case 3:
-            //        modelstospwan.Add(new AlgebraModel(3, _digitPrefabs[2]));
-                    
-            //        break;
-            //    case 4:
-            //        modelstospwan.Add(new AlgebraModel(4, _digitPrefabs[3]));
-                   
-            //        break;
-            //}
-        }
-        return modelstospwan;
-    }
-
-    private IEnumerator _makeaList(ElementContainerController elementContainer, List<AlgebraModel> model)
-    {
-        
         for (int i = 0; i < numberOfElement; i++)
         {
-            elementContainer.AddElement(Instantiate(a, _pathData.paths[0], Quaternion.identity),model[i]);
-            yield return new WaitForSeconds(1f);
+            elementContainer.AddElement(Instantiate(_a, _pathData.paths[0], Quaternion.identity), models[i]);
+
+            yield return new WaitForSeconds(_creationSpeed);
         }
         Debug.Log("Coroutne");
-        
+
     }
 }

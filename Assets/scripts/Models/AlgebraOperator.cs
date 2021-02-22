@@ -6,6 +6,8 @@ public class AlgebraOperator :MonoBehaviour
 {
     
     [SerializeField] public List<GameObject> _operators;
+    
+
     private GameObject islem;
     
     public enum operations
@@ -60,11 +62,7 @@ public class AlgebraOperator :MonoBehaviour
         return islem;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-
-    }
-
+   
     public static int add(int a, int b)
     {
         return a + b;
@@ -72,13 +70,20 @@ public class AlgebraOperator :MonoBehaviour
 
     public static int subtract(int a, int b)
     {
-        return a - b > 0 ? (a - b) : (b - a);
+        return a - b >= 0 ? (a - b) : (b - a);
+        
     }
 
     public static int divide(int a, int b)
     {
+        if (a==0 || b == 0)
+        {
+            return 0;
+        }
 
-        return a % b > 0 ?  (a/b) : (b/a);
+        return a > b ?  (a/b) : (b/a);
+
+        
     }
 
     public static int multiply(int a, int b)

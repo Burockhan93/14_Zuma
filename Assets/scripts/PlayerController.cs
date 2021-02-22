@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.Effects;
 using DG.Tweening;
 using UnityEditor;
@@ -10,64 +11,97 @@ using UnityStandardAssets.Utility;
 public class PlayerController : MonoBehaviour
 {
     public static HitEvent onPlayerHit = new HitEvent();
-    
+    public TextMesh text;
     public AlgebraOperator algebraOperator;
+    public RayCastOperator rayCastOperator;
 
-    
+    private Queue<GameObject> operators = new Queue<GameObject>();
+    private float _operatorSpeed;
+    private bool isFired;
+    private Transform _hit;
+    private TextHandler _textHandler;
+
     void Start()
     {
+        _textHandler = GetComponent<TextHandler>();
         //onPlayerHit.AddListener((vec)=> Debug.Log(vec.x +","+vec.y +","+vec.z +": Hitted"));
+        _operatorSpeed = 0.5f;
     }
     
-    // Update is called once per frame
+    
     void Update()
     {
-        Vector3 forward = transform.TransformDirection(Vector3.left) * 10;
-        Debug.DrawRay(transform.position, forward, Color.green);
-
-        if (Input.GetMouseButtonDown(0))
+        
+        if (Input.GetMouseButtonDown(0) && !isFired)
         {
+            
             Fire();
+            
         }
     }
 
     void Fire()
     {
-        GameObject _algebraOperator;
-        int i = Random.Range(0, 4);
+        
+        GameObject _algebraOperator ;
+        RaycastHit hit;     
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity,1 << 8))
+        {          
+            if (hit.transform != null)
+            {
+                isFired = true;
+                _hit = hit.transform;
+                _algebraOperator = Instantiate(GenerateOperator(), transform.position, Quaternion.identity);
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left), out hit, Mathf.Infinity,
-            1 << 8))
-        {
-            //_algebra = Instantiate(algebra, transform.position, Quaternion.identity).GetComponent<AlgebraModel>();
-            //_algebra.Value = 2;
+                rayCastOperator.setRayCastHit(hit);
 
-            _algebraOperator = Instantiate(algebraOperator._operators[i], transform.position, Quaternion.identity);
+                rayCastOperator.Addoperator(_algebraOperator);
 
-            MoveIslem(_algebraOperator, hit);
+                MoveIslem(_algebraOperator, hit);
+            }
         }
     }
 
+    private GameObject GenerateOperator()
+    {
+        while (operators.Count < 4)
+        {
+            int i = Random.Range(0, 4);
+
+            operators.Enqueue(algebraOperator._operators[i]);
+
+        }
+        
+        GameObject go = operators.Dequeue();
+        _textHandler.textHandler(text,operators);
+        return go;
+
+    }
+
+    
     void MoveIslem(GameObject algebraOperator, RaycastHit hit)
     {
 
         algebraOperator.transform.position = transform.position;
 
-        algebraOperator.transform.DOMove(hit.point, 0.5f).OnComplete(()=>MoveIslemOnComplete(hit.point,algebraOperator));
+        algebraOperator.transform.DOMove(hit.point, _operatorSpeed).OnComplete(() => {
+
+            CalculatorManager.islem = algebraOperator.GetComponent<AlgebraOperator>()._Operator; // Calc managerdaki islemi burdan belirliorz
+            Destroy(algebraOperator.gameObject, _operatorSpeed);
+            isFired = false;
+
+            FindObjectOfType<AudioManager>().Play("Hit");
+            FindObjectOfType<ParticleManager>().Play(hit.point);
+
+
+            onPlayerHit.Invoke(hit.point);
+
+            
+        });
         
-        //_algebra._holdable.transform.DOMove(hit.point, 2f).OnComplete(() => Destroy(sayiInPlayer.gameObject));
     }
-
-    void MoveIslemOnComplete(Vector3 vec, GameObject algebraOperator)
-    {
-
-        CalculatorManager.islem = algebraOperator.GetComponent<AlgebraOperator>()._Operator;
-        onPlayerHit.Invoke(vec);
-
-    }
-
 
 }
 

@@ -10,13 +10,26 @@ public class LevelManager : MonoBehaviour
     public static UnityEvent onLevelEnd =new UnityEvent();
     [SerializeField] private List<LevelData> _levelDatas;
     [SerializeField] private SpawnController _spawnController;
+    [SerializeField] private GameObject _endLevelMenu;
+    
 
-    private int currentLevel;
+    public static int currentLevel;
     private bool isLevelStarted=false;
     private LevelData _currentLevelData;
+    private AlgebraDestroyer _algebraDestroyer;
+
+    
+
+
+   
     public void Start()
     {
-        currentLevel = 1;
+
+        if (currentLevel == 0) currentLevel = 1;
+
+        _algebraDestroyer = GetComponent<AlgebraDestroyer>();
+        
+        
         onLevelEnd.AddListener(() =>
         {
             Debug.Log("Level Bitti");
@@ -37,15 +50,29 @@ public class LevelManager : MonoBehaviour
 
     public void StartLevel()
     {
-         _currentLevelData = _levelDatas.FirstOrDefault(x => x.levelId == currentLevel);
+       //  _currentLevelData = _levelDatas.FirstOrDefault(x => x.levelId == currentLevel);
         
-        _spawnController.StarSpawn(_currentLevelData);
+        _currentLevelData = _levelDatas[currentLevel-1]; //liste 0 dan basladigi icin -1
+
+        if (_currentLevelData.levelId==12) FindObjectOfType<AudioManager>().PlayTheme("ThemeFinal");
+
+        _spawnController.StartSpawn(_currentLevelData);
     }
 
     public void EndLevel()
     {
         //LevelBitince olacaklar sıralanacak
-        currentLevel++;
+
+        //SaveGame(currentLevel);
+
+        _algebraDestroyer.DestroyEverything();
+
+        
+
+        _endLevelMenu.SetActive(true);
+        
+
+        //currentLevel++;
         isLevelStarted = false;
     }
 
@@ -65,5 +92,7 @@ public class LevelManager : MonoBehaviour
     }
     private void Restart()
     {
+
     }
+
 }
