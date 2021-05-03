@@ -11,7 +11,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private List<LevelData> _levelDatas;
     [SerializeField] private SpawnController _spawnController;
     [SerializeField] private GameObject _endLevelMenu;
-    
+    [SerializeField] private Score __level;
+
 
     public static int currentLevel;
     private bool isLevelStarted=false;
@@ -53,6 +54,7 @@ public class LevelManager : MonoBehaviour
        //  _currentLevelData = _levelDatas.FirstOrDefault(x => x.levelId == currentLevel);
         
         _currentLevelData = _levelDatas[currentLevel-1]; //liste 0 dan basladigi icin -1
+        __level.Level(currentLevel);
 
         if (_currentLevelData.levelId==12) FindObjectOfType<AudioManager>().PlayTheme("ThemeFinal");
 

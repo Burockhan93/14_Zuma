@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SelectionManager : MonoBehaviour
 {
-    public RayCastOperator _rayCastOperator;
+    private RayCastOperator _rayCastOperator;
     private RayCastoperatorOutline _rayCastoperatorOutline;
     private OutlineResponse _outlineResponse;
 

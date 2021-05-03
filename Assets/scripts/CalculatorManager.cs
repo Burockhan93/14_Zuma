@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CalculatorManager : MonoBehaviour
 {
    [SerializeField] private ElementContainerController _elementContainer;
    [SerializeField] private AlgebraAdder _algebraAdder;
+    [SerializeField] private Score _score;
     private AlgebraDestroyer _algebraDestroyer;
 
     public static AlgebraOperator.operations islem; //Player controllun icinde degistirioz bunu
@@ -29,25 +31,35 @@ public class CalculatorManager : MonoBehaviour
         if (transforms.Count == 2)//test
         {
             int index = 0;
-
             Debug.Log(transforms[0].GetChild(0).gameObject.GetComponent<AlgebraModel>().getValue() +
                 " " + islem + "  " + transforms[1].GetChild(0).gameObject.GetComponent<AlgebraModel>().getValue());
-                
-
-
             int score = Calculate(transforms, islem);
-            if (score < 100 )
-            {
-                index =_algebraDestroyer.DestroyNearestItems(transforms);
-                _algebraAdder.AddAlgebraOnGame(score, index);
+            StartCoroutine(_add(score, index,transforms));
+        }
+    }
 
-            }
-            if (score == 0)
-            {
-                _algebraDestroyer.OneElementDestroyer(index);               
-                
-            }
-
+    IEnumerator _add (int score, int index,List<Transform> transforms)
+    {
+        
+        
+        if (score < 100)
+        {
+            index = _algebraDestroyer.DestroyNearestItems(transforms);
+            yield return new WaitForSeconds(0.3f);
+            _algebraAdder.AddAlgebraOnGame(score, index);
+        }
+        else if (score >= 100)
+        {
+            index = _algebraDestroyer.DestroyNearestItems(transforms);
+            yield return new WaitForSeconds(0.3f);
+            _algebraAdder.AddAlgebraOnGame(99, index);
+            yield return new WaitForSeconds(0.3f);
+            _algebraDestroyer.OneElementDestroyer(index);
+            _score.Add(99);
+        }
+        if (score == 0)
+        {
+            _algebraDestroyer.OneElementDestroyer(index);
         }
     }
       
@@ -101,6 +113,7 @@ public class CalculatorManager : MonoBehaviour
             return 0;
         }
 
+        _score.Add(a >= b ? (a % b) : (b % a));
         return a >= b ? (a / b) : (b / a);
 
 

@@ -20,7 +20,6 @@ public class SpawnController : MonoBehaviour
 
     void Start()
     {
-        _creationSpeed = 1f;
 
         a = new GameObject();
         _a = a.transform; 
@@ -30,14 +29,15 @@ public class SpawnController : MonoBehaviour
 
     public void StartSpawn(LevelData levelData)
     {
+        _creationSpeed = levelData.levelTime * 0.05f;
         _pathData = levelData.path;
         numberOfElement = levelData.levelDigits.Count;
         models = levelData.levelDigits;
 
-        StartCoroutine(_makeaList(elementContainer, models));
+        StartCoroutine(_makeaList(models)); // Element Containeri ekelriz sikinti cikarsa
     }
    
-    private IEnumerator _makeaList(ElementContainerController elementContainer, List<int> models)
+    private IEnumerator _makeaList( List<int> models)
     {
         for (int i = 0; i < numberOfElement; i++)
         {
@@ -45,7 +45,7 @@ public class SpawnController : MonoBehaviour
 
             yield return new WaitForSeconds(_creationSpeed);
         }
-        Debug.Log("Coroutne");
+        Debug.Log("Coroutine");
 
     }
 }

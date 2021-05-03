@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public TextMesh text;
     public AlgebraOperator algebraOperator;
     public RayCastOperator rayCastOperator;
+    [SerializeField] GameObject endMenu;
+    [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject options;
 
     private Queue<GameObject> operators = new Queue<GameObject>();
     private float _operatorSpeed;
@@ -26,13 +29,14 @@ public class PlayerController : MonoBehaviour
         _textHandler = GetComponent<TextHandler>();
         //onPlayerHit.AddListener((vec)=> Debug.Log(vec.x +","+vec.y +","+vec.z +": Hitted"));
         _operatorSpeed = 0.5f;
+
     }
     
     
     void Update()
     {
         
-        if (Input.GetMouseButtonDown(0) && !isFired)
+        if (Input.GetMouseButtonDown(0) && !isFired && !endMenu.activeSelf && !pauseMenu.activeSelf && !options.activeSelf)
         {
             
             Fire();

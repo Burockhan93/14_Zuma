@@ -7,20 +7,19 @@ using UnityEngine.EventSystems;
 
 public class LevelSelect : MonoBehaviour
 {
-    public Button[] buttons; // buttonlari daha iyi yonetmek icin array veya liste ile yapacaz bunu
-    public ManageScenes manager;
-    private int level;
+    [SerializeField] private Text input;
+    private Dictionary<string, int[]> users;
 
+    public Button[] buttons; // buttonlari daha iyi yonetmek icin array veya liste ile yapacaz bunu
+    public ManageScenesSaves manager;
+
+    private string user;
 
     private void Start()
     {
-        DataToSave data = manager.getData();
-        level = data.level;
-        // level = 2;
-        ButtonHandler();
-
-        
+                
     }
+
     public void OnClickButton()
     {
         string name = EventSystem.current.currentSelectedGameObject.name; // name ile yaptik ama script ile gelistirilebilir
@@ -84,12 +83,18 @@ public class LevelSelect : MonoBehaviour
 
     public void Playgame()
     {
-       
+        Debug.Log(ManageScenesSaves.UserName);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    private void ButtonHandler()
+    private void ButtonHandler(int level)
     {
+        for (int i = 0; i < buttons.Length; i++) // önce hepsi true
+        {
+            buttons[i].interactable = true;
+            buttons[i].GetComponent<Animator>().enabled = true; 
+
+        }
         for (int i = buttons.Length; i > level; i--)
         {
             buttons[i - 1].interactable = false;
@@ -98,4 +103,25 @@ public class LevelSelect : MonoBehaviour
         }
     }
 
+        public void getName(string s)
+    {       
+        ManageScenesSaves.UserName = s;
+        Debug.Log(s);
+
+        users = manager.getData();
+            
+
+        if (users.ContainsKey(s))
+        {
+            ButtonHandler(users[s][0]);
+            Debug.Log("Deger: " + users[s][1] + "level : "+ users[s][0]);
+        }
+        else
+        { // degisecek
+            SaveSystem.SaveUser(s);
+            
+            ButtonHandler(users[s][0]);
+            Debug.Log(s+"  Deger: yok " + "level : " + users[s][0]);
+        }
+    }
 }

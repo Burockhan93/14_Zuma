@@ -1,23 +1,40 @@
 ﻿using System.IO;
 using UnityEngine;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem  
 {
-    public static void SaveProgress(int lvl)
+
+    private static void Save(DataToSave data)
     {
         BinaryFormatter formatter = new BinaryFormatter();
         //string path = "D:/Games";
         string path = Application.persistentDataPath + "/zuMath.jaws";
 
         FileStream stream = new FileStream(path, FileMode.Create);
-
-        DataToSave data = new DataToSave(lvl);
-
-        formatter.Serialize(stream, data);
+        formatter.Serialize(stream, ManageScenesSaves.data);
         stream.Close();
-
     }
+    
+
+    public static void SaveProgress(string uName,int lvl, int score )
+    {
+        ManageScenesSaves.data.saveProgress(uName,lvl,score);
+        Save(ManageScenesSaves.data);
+    }
+    public static void SaveUser(string uName)
+    {
+        ManageScenesSaves.data.addUser(uName);
+        ManageScenesSaves.data.addHighScore(uName, 100);
+        Save(ManageScenesSaves.data);
+    }
+    public static void SaveHighScore(string uName, int highScore)
+    {
+        ManageScenesSaves.data.addHighScore(uName,highScore);
+        Save(ManageScenesSaves.data);
+    }
+
 
     public static DataToSave LoadProgress()
     {

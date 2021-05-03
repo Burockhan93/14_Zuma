@@ -10,24 +10,24 @@ public class RayCastoperatorOutline : MonoBehaviour
     {
         this._selection.Clear();
 
-        RaycastHit[] hits = Physics.SphereCastAll(ray.origin, 1.89f, ray.direction, Mathf.Infinity,layermask);
+        RaycastHit[] hits = Physics.SphereCastAll(ray.origin, 1f, ray.direction, Mathf.Infinity,layermask);
 
-        //Debug.Log(ray.origin);
+        RaycastHit hit1;
+
+        Physics.Raycast(ray, out hit1, Mathf.Infinity, 1 << 8);
 
         foreach (var hit in hits)
         {
-
             if (hit.transform.CompareTag("number"))
             {
-                if (!this._selection.Contains(hit.transform))
-                {
+
+                if (!this._selection.Contains(hit.transform) && Vector3.Distance(hit.transform.position,hit1.point)<1f) { 
+                    
                     this._selection.Add(hit.transform);
+
+                   }
                 }
-                
-
             }
-        }
-
     }
     public List<Transform> GetSelection()
     {

@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class EndLevel : MonoBehaviour
 {
     public Button[] buttons;
+    public TextMesh text;
 
 
     public void OnClickButton()
@@ -15,10 +16,18 @@ public class EndLevel : MonoBehaviour
         
         switch (name)
         {
-            case "Next": LevelManager.currentLevel += 1; SaveSystem.SaveProgress(LevelManager.currentLevel);
+            case "Next":
+
+                if (LevelManager.currentLevel == 12)
+                {
+                    Debug.Log("Oyun bitti");
+                    SaveSystem.SaveHighScore(ManageScenesSaves.UserName, int.Parse(text.text));
+                    break;
+                }
+                LevelManager.currentLevel += 1; SaveSystem.SaveProgress(ManageScenesSaves.UserName, LevelManager.currentLevel, int.Parse(text.text));
                 break;
             case "Replay":
-                SaveSystem.SaveProgress(LevelManager.currentLevel);
+                SaveSystem.SaveProgress(ManageScenesSaves.UserName, LevelManager.currentLevel, int.Parse(text.text));
                 break;
             default:
                 break;

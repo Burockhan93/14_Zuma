@@ -12,6 +12,8 @@ public class ElementContainerController : MonoBehaviour
         
     [SerializeField] private LevelManager _levelManager;
     [SerializeField] private AlgebraAdder _algebraAdder;
+    [SerializeField] private Score _score;
+    private int textNumber;
 
     private int createdItemCount = 0;
     
@@ -28,38 +30,34 @@ public class ElementContainerController : MonoBehaviour
 
     public void AddElement(Transform element, int models)
     {
-
         items.Add(element);
-
         _algebraAdder.AddAlgebra(models);
-
         var j = items.Count;
-
-        var path = _levelManager.GetCurrentPath();
-        var levelTime = _levelManager.GetLevelTime();
-        var itemNumber = _levelManager.GetLevelDigitNumber();
-        FollowPath(path, items[j - 1], levelTime, itemNumber);
-
+        FollowPath(items[j - 1]);
     }
 
    
 
-    private void FollowPath(PathData getCurrentPath, Transform elementCont, float levelTime, int getLevelDigitNumber)
+    private void FollowPath(Transform elementCont)
     {
-        createdItemCount++;
-        var itemNumber = _levelManager.GetLevelDigitNumber();
-        var temp = itemNumber == createdItemCount;
-        if (temp)
-        {
-            elementCont.DOPath(getCurrentPath.paths.ToArray(),  levelTime - getLevelDigitNumber)
-                .SetEase(Ease.Linear)
-                .OnComplete(() => LevelManager.onLevelEnd.Invoke()); //invokes the EndLevel in LevelManager
-        }
-        else
-        {
-            elementCont.DOPath(getCurrentPath.paths.ToArray(), levelTime - getLevelDigitNumber)
-                .SetEase(Ease.Linear);
-        }
+        var levelTime = _levelManager.GetLevelTime();
+        var path = _levelManager.GetCurrentPath();
+
+        elementCont.DOPath(path.paths.ToArray(), levelTime).SetEase(Ease.Linear).OnComplete(() =>
+         {
+             createdItemCount++;
+             var itemNumber = _levelManager.GetLevelDigitNumber();
+             var temp = itemNumber == createdItemCount;
+
+             if (elementCont.childCount > 0) 
+             {
+                 textNumber += elementCont.GetChild(0).GetComponent<AlgebraModel>().getValue();
+                 _score.Add(textNumber);
+             }
+
+             if (temp) LevelManager.onLevelEnd.Invoke();
+
+         });
 
     }
 
@@ -78,25 +76,14 @@ public class ElementContainerController : MonoBehaviour
         int nearestIndex = 0;
         int secNearestIndex = 0;
 
-
-        //float nearestDistance = Mathf.Infinity;
-        //float secNearestDistance = Mathf.Infinity;
-
-        //float distance = 5;
-        //float distance1 = 5f;
-
-
-
         for (int i=0; i < items.Count; i++)
         {
             liste.Add(i, Vector3.Distance(items[i].position, point));
             
         }
 
-        //float a = Mathf.Infinity;
-        //float b = Mathf.Infinity;
-        float a = 3;
-        float b = 3;
+        float a = 2;
+        float b = 2;
 
         foreach (KeyValuePair<int,float> mallik in liste)
         {
@@ -108,7 +95,7 @@ public class ElementContainerController : MonoBehaviour
             
         }
 
-        liste[nearestIndex] = Mathf.Infinity;
+        liste[nearestIndex] = Mathf.Infinity; // bunu aldik zaten geri donecek listeye simdi tekrar almamak icin infinity yapioz degeri
 
         foreach (KeyValuePair<int, float> mallik in liste)
         {
@@ -125,42 +112,6 @@ public class ElementContainerController : MonoBehaviour
             nearestPoints.Add(items[secNearestIndex]);
         }
           
-
-        //Debug.Log(a+"   "+b);
-        //Debug.Log(nearestIndex + "    " + secNearestIndex);
-
-        //for (int i = 0; i < items.Count; i++)
-        //{
-        //    if (Vector3.Distance(items[i].position, point) < distance &&
-        //        Vector3.Distance(items[i].position, point) < distance1)
-        //    {
-        //        distance = Vector3.Distance(items[i].position, point);
-        //        nearestIndex = i;
-                
-        //    }
-        //    else if (Vector3.Distance(items[i].position, point) >= distance &&
-        //             Vector3.Distance(items[i].position, point) < distance1)
-        //    {
-        //        distance1 = Vector3.Distance(items[i].position, point);
-        //        secNearestIndex = i;
-        //    }
-       // }
-
-
-        //if (Mathf.Abs(nearestIndex - secNearestIndex) == 1)
-        //{
-        //    nearestPoints.Add(items[nearestIndex]);
-        //    nearestPoints.Add(items[secNearestIndex]);
-
-        //    //Debug.Log("A: " + items[nearestIndex].GetChild(0).gameObject.GetComponent<AlgebraModel>().getValue() + "B: " +
-        //    //    items[secNearestIndex].GetChild(0).gameObject.GetComponent<AlgebraModel>().getValue());
-
-        //    Debug.Log(nearestIndex+" ---  "+secNearestIndex);
-
-
-        //}
-
-
         return nearestPoints;
     }
 

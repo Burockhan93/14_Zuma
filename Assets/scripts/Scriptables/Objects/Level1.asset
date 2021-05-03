@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelId: 1
   levelTime: 15
-  levelDigits: 0200000002000000
+  levelDigits: 2d00000021000000
   path: {fileID: 11400000, guid: 1d28e64e57e74be48af25b4a8053dfff, type: 2}

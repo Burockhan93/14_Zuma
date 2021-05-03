@@ -5,20 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class Particles
 {
+    //simdilik fonksionel degil
 
     public string name;
-    public ParticleSystem particle;
-    public AlgebraOperator algebraOperator;
+    public ParticleSystem particleSystem;
 
     
-    public float volume;
-    
-    public float pitch;
+    public float emissionValue;
 
-    
-
-    public bool loop;
-
-    [HideInInspector]
-    public AudioSource source;
 }
